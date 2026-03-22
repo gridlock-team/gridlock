@@ -35,13 +35,13 @@ export default function JoinForm({
 
   return (
     <div className="space-y-4">
-      <input className="w-full border rounded px-3 py-2 bg-slate-800" placeholder="Your name" value={name} onChange={e => setName(e.target.value)} />
+      <input className="w-full border rounded px-3 py-2 bg-slate-800 text-slate-100 placeholder:text-slate-400" placeholder="Your name" value={name} onChange={e => setName(e.target.value)} />
       <div className="flex gap-2">
-        <select className="border rounded px-3 py-2 bg-slate-800" value={contactType} onChange={e => setContactType(e.target.value as any)}>
+        <select className="border rounded px-3 py-2 bg-slate-800 text-slate-100 placeholder:text-slate-400" value={contactType} onChange={e => setContactType(e.target.value as any)}>
           <option value="email">Email</option>
           <option value="sms">SMS</option>
         </select>
-        <input className="flex-1 border rounded px-3 py-2 bg-slate-800" placeholder={contactType === 'email' ? 'your@email.com' : '+1 (555) 000-0000'} value={contact} onChange={e => setContact(e.target.value)} />
+        <input className="flex-1 border rounded px-3 py-2 bg-slate-800 text-slate-100 placeholder:text-slate-400" placeholder={contactType === 'email' ? 'your@email.com' : '+1 (555) 000-0000'} value={contact} onChange={e => setContact(e.target.value)} />
       </div>
       <p className="text-slate-400 text-sm">Tap a square below to claim it</p>
       {selectedSquare && (

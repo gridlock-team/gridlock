@@ -42,7 +42,7 @@ export default function LoginPage() {
             value={email}
             onChange={e => setEmail(e.target.value)}
             required
-            className="w-full border rounded px-3 py-2"
+            className="w-full border rounded px-3 py-2 bg-slate-800 text-slate-100 placeholder:text-slate-400"
           />
           <button type="submit" className="w-full bg-blue-600 text-white rounded py-2">
             Send Magic Link

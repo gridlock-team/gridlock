@@ -24,9 +24,9 @@ export default function ManagePage() {
     <div className="p-6 max-w-md">
       <h2 className="text-xl font-bold mb-4">Record Score</h2>
       <form onSubmit={recordScore} className="space-y-3">
-        <input className="w-full border rounded px-3 py-2 bg-slate-800" placeholder="Period (e.g. Q1, Half, Final)" value={period} onChange={e => setPeriod(e.target.value)} required />
-        <input type="number" className="w-full border rounded px-3 py-2 bg-slate-800" placeholder="Home score" value={homeScore} onChange={e => setHomeScore(e.target.value)} required />
-        <input type="number" className="w-full border rounded px-3 py-2 bg-slate-800" placeholder="Away score" value={awayScore} onChange={e => setAwayScore(e.target.value)} required />
+        <input className="w-full border rounded px-3 py-2 bg-slate-800 text-slate-100 placeholder:text-slate-400" placeholder="Period (e.g. Q1, Half, Final)" value={period} onChange={e => setPeriod(e.target.value)} required />
+        <input type="number" className="w-full border rounded px-3 py-2 bg-slate-800 text-slate-100 placeholder:text-slate-400" placeholder="Home score" value={homeScore} onChange={e => setHomeScore(e.target.value)} required />
+        <input type="number" className="w-full border rounded px-3 py-2 bg-slate-800 text-slate-100 placeholder:text-slate-400" placeholder="Away score" value={awayScore} onChange={e => setAwayScore(e.target.value)} required />
         <button type="submit" className="w-full bg-green-600 text-white rounded py-2">Record Score</button>
       </form>
       {result && <p className="mt-3 text-sm">{result}</p>}
