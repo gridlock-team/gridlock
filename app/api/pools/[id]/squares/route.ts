@@ -5,7 +5,8 @@ import { sendEmail } from '@/lib/notifications/email'
 import { numbersRevealMessage } from '@/lib/notifications/messages'
 import { NextResponse } from 'next/server'
 
-export async function POST(request: Request, { params }: { params: { id: string } }) {
+export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   const supabase = createClient()
   const body = await request.json()
   const { row, col, guest_name, guest_email, guest_phone, owner_id } = body
@@ -18,7 +19,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
   const { data: pool } = await supabase
     .from('pools')
     .select('id, status')
-    .eq('id', params.id)
+    .eq('id', id)
     .single()
 
   if (!pool || pool.status !== 'open') {
@@ -27,7 +28,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
 
   const { data: square, error } = await supabase
     .from('squares')
-    .insert({ pool_id: params.id, row, col, owner_id, guest_name, guest_email, guest_phone })
+    .insert({ pool_id: id, row, col, owner_id, guest_name, guest_email, guest_phone })
     .select()
     .single()
 
@@ -37,21 +38,21 @@ export async function POST(request: Request, { params }: { params: { id: string 
   const { count } = await supabase
     .from('squares')
     .select('*', { count: 'exact', head: true })
-    .eq('pool_id', params.id)
+    .eq('pool_id', id)
 
   if (count === 100) {
     const entries = generatePoolNumbers()
     await supabase.from('pool_numbers').insert(
-      entries.map(e => ({ pool_id: params.id, ...e }))
+      entries.map(e => ({ pool_id: id, ...e }))
     )
-    await supabase.from('pools').update({ status: 'locked' }).eq('id', params.id)
+    await supabase.from('pools').update({ status: 'locked' }).eq('id', id)
 
     // Send numbers-reveal notifications to all participants
     const { data: allSquares } = await supabase
       .from('squares')
       .select('row, col, guest_name, guest_email, guest_phone, users(display_name, email, phone)')
-      .eq('pool_id', params.id)
-    const { data: poolData } = await supabase.from('pools').select('team_home, team_away').eq('id', params.id).single()
+      .eq('pool_id', id)
+    const { data: poolData } = await supabase.from('pools').select('team_home, team_away').eq('id', id).single()
     const rowNums = entries.filter(e => e.axis === 'row')
     const colNums = entries.filter(e => e.axis === 'col')
     for (const sq of (allSquares ?? [])) {

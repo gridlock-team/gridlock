@@ -2,12 +2,13 @@ import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import { Grid } from '@/components/grid/Grid'
 
-export default async function PoolPage({ params }: { params: { id: string } }) {
+export default async function PoolPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   const supabase = createClient()
   const { data: pool } = await supabase
     .from('pools')
     .select('*, squares(*), pool_numbers(*), score_snapshots(*)')
-    .eq('id', params.id)
+    .eq('id', id)
     .single()
 
   if (!pool) notFound()

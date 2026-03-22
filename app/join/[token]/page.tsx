@@ -2,12 +2,13 @@ import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import JoinForm from './JoinForm'
 
-export default async function JoinPage({ params }: { params: { token: string } }) {
+export default async function JoinPage({ params }: { params: Promise<{ token: string }> }) {
+  const { token } = await params
   const supabase = createClient()
   const { data: pool } = await supabase
     .from('pools')
     .select('id, name, sport, team_home, team_away, status, squares(*), pool_numbers(*), score_snapshots(*)')
-    .eq('join_token', params.token)
+    .eq('join_token', token)
     .single()
 
   if (!pool || pool.status === 'completed') notFound()

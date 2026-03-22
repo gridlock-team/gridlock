@@ -7,7 +7,8 @@ import { periodWinnerMessage } from '@/lib/notifications/messages'
 import type { PoolNumberEntry } from '@/lib/scoring/numbers'
 import { NextResponse } from 'next/server'
 
-export async function POST(request: Request, { params }: { params: { id: string } }) {
+export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   // Allow cron job to call this route using CRON_SECRET bearer token (no user session)
   const authHeader = request.headers.get('authorization')
   const isCron = authHeader === `Bearer ${process.env.CRON_SECRET}`
@@ -31,7 +32,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
   const { data: pool } = await supabase
     .from('pools')
     .select('*, pool_numbers(*)')
-    .eq('id', params.id)
+    .eq('id', id)
     .single()
 
   if (!pool) return NextResponse.json({ error: 'Pool not found' }, { status: 404 })
@@ -46,7 +47,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
     const { data: square } = await supabase
       .from('squares')
       .select('*, users(display_name, phone, email)')
-      .eq('pool_id', params.id)
+      .eq('pool_id', id)
       .eq('row', position.row)
       .eq('col', position.col)
       .single()
@@ -60,7 +61,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
   // Record snapshot
   const { data: snapshot } = await supabase
     .from('score_snapshots')
-    .insert({ pool_id: params.id, period_name, home_score, away_score, winning_square_id })
+    .insert({ pool_id: id, period_name, home_score, away_score, winning_square_id })
     .select()
     .single()
 
@@ -70,7 +71,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
     const allSquares = await supabase
       .from('squares')
       .select('guest_name, guest_email, guest_phone, users(display_name, email, phone)')
-      .eq('pool_id', params.id)
+      .eq('pool_id', id)
 
     for (const sq of (allSquares.data ?? [])) {
       const isWinner = sq === winnerSquare
@@ -85,7 +86,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
   // Auto-complete pool when the final payout period score is recorded
   const lastPeriod = (pool.payout_periods as string[]).at(-1)
   if (period_name === lastPeriod) {
-    await supabase.from('pools').update({ status: 'completed' }).eq('id', params.id)
+    await supabase.from('pools').update({ status: 'completed' }).eq('id', id)
   }
 
   return NextResponse.json(snapshot, { status: 201 })
