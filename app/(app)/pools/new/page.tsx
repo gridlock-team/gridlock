@@ -40,7 +40,7 @@ export default function NewPoolPage() {
         </select>
         <input className="w-full border rounded px-3 py-2 bg-slate-800 text-slate-100 placeholder:text-slate-400" placeholder="Home team" value={form.team_home} onChange={e => set('team_home', e.target.value)} required />
         <input className="w-full border rounded px-3 py-2 bg-slate-800 text-slate-100 placeholder:text-slate-400" placeholder="Away team" value={form.team_away} onChange={e => set('team_away', e.target.value)} required />
-        <input type="datetime-local" className="w-full border rounded px-3 py-2 bg-slate-800 text-slate-100 placeholder:text-slate-400" value={form.game_date} onChange={e => set('game_date', e.target.value)} />
+        <input type="datetime-local" className="w-full border rounded px-3 py-2 bg-slate-800 text-slate-100 placeholder:text-slate-400 [color-scheme:dark]" value={form.game_date} onChange={e => set('game_date', e.target.value)} />
         <div>
           <label className="text-sm text-slate-400">Payout periods: {periods.join(', ') || 'none'}</label>
           <div className="flex gap-2 mt-1">
