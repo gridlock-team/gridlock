@@ -34,17 +34,17 @@ export default function NewPoolPage() {
     <div className="p-6 max-w-lg">
       <h1 className="text-2xl font-bold mb-6">Create Pool</h1>
       <form onSubmit={handleSubmit} className="space-y-4">
-        <input className="w-full border rounded px-3 py-2 bg-slate-800" placeholder="Pool name" value={form.name} onChange={e => set('name', e.target.value)} required />
-        <select className="w-full border rounded px-3 py-2 bg-slate-800" value={form.sport} onChange={e => set('sport', e.target.value)}>
+        <input className="w-full border rounded px-3 py-2 bg-slate-800 text-slate-100 placeholder:text-slate-400" placeholder="Pool name" value={form.name} onChange={e => set('name', e.target.value)} required />
+        <select className="w-full border rounded px-3 py-2 bg-slate-800 text-slate-100 placeholder:text-slate-400" value={form.sport} onChange={e => set('sport', e.target.value)}>
           <option>NFL</option><option>NCAA Football</option><option>NCAA Basketball</option><option>Soccer</option><option>Custom</option>
         </select>
-        <input className="w-full border rounded px-3 py-2 bg-slate-800" placeholder="Home team" value={form.team_home} onChange={e => set('team_home', e.target.value)} required />
-        <input className="w-full border rounded px-3 py-2 bg-slate-800" placeholder="Away team" value={form.team_away} onChange={e => set('team_away', e.target.value)} required />
-        <input type="datetime-local" className="w-full border rounded px-3 py-2 bg-slate-800" value={form.game_date} onChange={e => set('game_date', e.target.value)} />
+        <input className="w-full border rounded px-3 py-2 bg-slate-800 text-slate-100 placeholder:text-slate-400" placeholder="Home team" value={form.team_home} onChange={e => set('team_home', e.target.value)} required />
+        <input className="w-full border rounded px-3 py-2 bg-slate-800 text-slate-100 placeholder:text-slate-400" placeholder="Away team" value={form.team_away} onChange={e => set('team_away', e.target.value)} required />
+        <input type="datetime-local" className="w-full border rounded px-3 py-2 bg-slate-800 text-slate-100 placeholder:text-slate-400 [color-scheme:dark]" value={form.game_date} onChange={e => set('game_date', e.target.value)} />
         <div>
           <label className="text-sm text-slate-400">Payout periods: {periods.join(', ') || 'none'}</label>
           <div className="flex gap-2 mt-1">
-            <input className="flex-1 border rounded px-3 py-2 bg-slate-800" placeholder="Add period (e.g. Q1)" value={customPeriod} onChange={e => setCustomPeriod(e.target.value)} />
+            <input className="flex-1 border rounded px-3 py-2 bg-slate-800 text-slate-100 placeholder:text-slate-400" placeholder="Add period (e.g. Q1)" value={customPeriod} onChange={e => setCustomPeriod(e.target.value)} />
             <button type="button" onClick={() => { if (customPeriod) { setPeriods(p => [...p, customPeriod]); setCustomPeriod('') } }} className="border rounded px-3 py-2">Add</button>
           </div>
         </div>
