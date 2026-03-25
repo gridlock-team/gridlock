@@ -1,8 +1,9 @@
 import twilio from 'twilio'
+import { env } from '@/lib/env'
 
 const client = twilio(
-  process.env.TWILIO_ACCOUNT_SID!,
-  process.env.TWILIO_AUTH_TOKEN!
+  env.TWILIO_ACCOUNT_SID,
+  env.TWILIO_AUTH_TOKEN
 )
 
 export interface SmsPayload {
@@ -12,7 +13,7 @@ export interface SmsPayload {
 
 export async function sendSms({ to, body }: SmsPayload): Promise<void> {
   await client.messages.create({
-    from: process.env.TWILIO_FROM_NUMBER!,
+    from: env.TWILIO_FROM_NUMBER,
     to,
     body,
   })
