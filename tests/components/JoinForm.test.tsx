@@ -87,3 +87,51 @@ describe('post-claim phase', () => {
     expect(screen.getByText(/\(2, 4\) claimed/)).toBeInTheDocument()
   })
 })
+
+describe('confirm screen', () => {
+  beforeEach(() => {
+    global.fetch = vi.fn().mockResolvedValue({ ok: true } as Response)
+  })
+
+  afterEach(() => {
+    vi.restoreAllMocks()
+  })
+
+  async function claimAndFinish() {
+    render(<JoinForm {...defaultProps} />)
+    fireEvent.change(screen.getByPlaceholderText('Your name'), { target: { value: 'David' } })
+    // Claim first square
+    fireEvent.click(screen.getByText('grid-square-2-4'))
+    fireEvent.click(screen.getByRole('button', { name: /Claim \(2, 4\)/ }))
+    await waitFor(() => screen.getByRole('button', { name: /I'm finished/ }))
+    // Claim second square
+    fireEvent.click(screen.getByText('grid-square-7-1'))
+    fireEvent.click(screen.getByRole('button', { name: /Claim \(7, 1\)/ }))
+    await waitFor(() => screen.getByRole('button', { name: /I'm finished/ }))
+    // Open confirm screen
+    fireEvent.click(screen.getByRole('button', { name: /I'm finished/ }))
+  }
+
+  it('shows confirm heading', async () => {
+    await claimAndFinish()
+    expect(screen.getByText(/Confirm your squares/)).toBeInTheDocument()
+  })
+
+  it('lists all claimed squares', async () => {
+    await claimAndFinish()
+    expect(screen.getByText('Row 2, Col 4')).toBeInTheDocument()
+    expect(screen.getByText('Row 7, Col 1')).toBeInTheDocument()
+  })
+
+  it('shows square count', async () => {
+    await claimAndFinish()
+    expect(screen.getByText(/You claimed 2 squares/)).toBeInTheDocument()
+  })
+
+  it('returns to claiming phase when Go back is clicked', async () => {
+    await claimAndFinish()
+    fireEvent.click(screen.getByRole('button', { name: /Go back/ }))
+    expect(screen.getByRole('button', { name: /I'm finished/ })).toBeInTheDocument()
+    expect(screen.queryByText(/Confirm your squares/)).not.toBeInTheDocument()
+  })
+})
