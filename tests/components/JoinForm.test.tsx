@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { render, screen, fireEvent } from '@testing-library/react'
 import JoinForm from '@/app/join/[token]/JoinForm'
 
 // Mock Grid so tests don't need Supabase

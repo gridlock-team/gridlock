@@ -16,7 +16,6 @@ export default function JoinForm({
   const [contactType, setContactType] = useState<'email' | 'sms'>('email')
   const [selectedSquare, setSelectedSquare] = useState<{ row: number; col: number } | null>(null)
   const [claimedSquares, setClaimedSquares] = useState<{ row: number; col: number }[]>([])
-  const [lastClaimed, setLastClaimed] = useState<{ row: number; col: number } | null>(null)
   const [phase, setPhase] = useState<Phase>('form')
 
   function handleSelectSquare(row: number, col: number) {
@@ -40,9 +39,8 @@ export default function JoinForm({
         guest_phone: contactType === 'sms' ? contact : undefined,
       }),
     })
-    if (res.ok) {
+    if (res.ok && (phase === 'form' || phase === 'claiming')) {
       setClaimedSquares(prev => [...prev, selectedSquare])
-      setLastClaimed(selectedSquare)
       setSelectedSquare(null)
       setPhase('claiming')
     }
@@ -119,9 +117,9 @@ export default function JoinForm({
         </div>
       )}
 
-      {lastClaimed && phase === 'claiming' ? (
+      {claimedSquares.at(-1) && phase === 'claiming' ? (
         <p className="text-green-400 text-sm">
-          ✓ ({lastClaimed.row}, {lastClaimed.col}) claimed — tap a square to select another
+          ✓ ({claimedSquares.at(-1)!.row}, {claimedSquares.at(-1)!.col}) claimed — tap a square to select another
         </p>
       ) : (
         <p className="text-slate-400 text-sm">Tap a square below to claim it</p>
@@ -143,7 +141,7 @@ export default function JoinForm({
         onClaimSquare={handleSelectSquare}
       />
 
-      {phase === 'claiming' && (
+      {phase === 'claiming' && claimedSquares.length > 0 && (
         <button
           onClick={() => setPhase('confirm')}
           className="w-full bg-slate-800 border border-slate-600 text-slate-300 rounded py-2"
