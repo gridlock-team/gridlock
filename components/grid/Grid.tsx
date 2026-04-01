@@ -89,6 +89,7 @@ export function Grid({
                 row={row}
                 col={col}
                 ownerName={sq?.guest_name ?? null}
+                ownerId={sq?.owner_id ?? null}
                 isWinner={winnerIds.has(sq?.id ?? '')}
                 isCurrentWinner={sq?.id === latestWinnerId}
                 isSelected={selectedSquare?.row === row && selectedSquare?.col === col}

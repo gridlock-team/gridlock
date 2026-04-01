@@ -45,6 +45,9 @@ export default function JoinForm({
       </div>
       <p className="text-slate-400 text-sm">Tap a square below to claim it</p>
       {selectedSquare && (
+        <p className="text-sm text-blue-300">Selected: Row {selectedSquare.row + 1}, Col {selectedSquare.col + 1}</p>
+      )}
+      {selectedSquare && (
         <button onClick={handleClaim} className="w-full bg-blue-600 text-white rounded py-2">
           Claim Square (Row {selectedSquare.row + 1}, Col {selectedSquare.col + 1})
         </button>
