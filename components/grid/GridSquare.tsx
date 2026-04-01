@@ -10,7 +10,9 @@ interface GridSquareProps {
 }
 
 export function GridSquare({ row, col, ownerName, ownerId = null, isWinner, isCurrentWinner, isSelected = false, onClaim }: GridSquareProps) {
-  const isClaimed = ownerName !== null || ownerId !== null
+  const hasGuestName = typeof ownerName === 'string' && ownerName.trim().length > 0
+  const hasOwnerId = typeof ownerId === 'string' && ownerId.trim().length > 0
+  const isClaimed = hasGuestName || hasOwnerId
   const label = isCurrentWinner ? `Winner square at row ${row + 1}, column ${col + 1}` : `Square row ${row + 1}, column ${col + 1}`
 
   let className = 'flex-1 h-14 flex items-center justify-center text-xs rounded mx-px transition-all '
