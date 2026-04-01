@@ -5,6 +5,9 @@ export const metadata: Metadata = {
   title: 'GridLock',
   description: 'Sports squares pool app',
   manifest: '/manifest.json',
+  other: {
+    google: 'notranslate',
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
@@ -20,8 +23,8 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body className="bg-slate-900 text-slate-100 min-h-screen">
+    <html lang="en" translate="no" className="notranslate">
+      <body className="notranslate bg-slate-900 text-slate-100 min-h-screen">
         {children}
       </body>
     </html>
