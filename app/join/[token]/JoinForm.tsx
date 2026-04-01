@@ -46,7 +46,7 @@ export default function JoinForm({
       <p className="text-slate-400 text-sm">Tap a square below to claim it</p>
       {selectedSquare && (
         <button onClick={handleClaim} className="w-full bg-blue-600 text-white rounded py-2">
-          Claim Square ({selectedSquare.row}, {selectedSquare.col})
+          Claim Square (Row {selectedSquare.row + 1}, Col {selectedSquare.col + 1})
         </button>
       )}
       <Grid
@@ -56,7 +56,14 @@ export default function JoinForm({
         initialSquares={initialSquares}
         initialPoolNumbers={initialPoolNumbers}
         initialSnapshots={initialSnapshots}
-        onClaimSquare={(row, col) => setSelectedSquare({ row, col })}
+        selectedSquare={selectedSquare}
+        onClaimSquare={(row, col) => {
+          setSelectedSquare(prev =>
+            prev && prev.row === row && prev.col === col
+              ? null
+              : { row, col }
+          )
+        }}
       />
     </div>
   )

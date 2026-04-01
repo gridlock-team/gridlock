@@ -30,12 +30,14 @@ interface GridProps {
   initialSquares: Square[]
   initialPoolNumbers: PoolNumber[]
   initialSnapshots: ScoreSnapshot[]
+  selectedSquare?: { row: number, col: number } | null
   onClaimSquare?: (row: number, col: number) => void
 }
 
 export function Grid({
   poolId, teamHome, teamAway,
   initialSquares, initialPoolNumbers, initialSnapshots,
+  selectedSquare,
   onClaimSquare,
 }: GridProps) {
   const [squares, setSquares] = useState<Square[]>(initialSquares)
@@ -89,6 +91,7 @@ export function Grid({
                 ownerName={sq?.guest_name ?? null}
                 isWinner={winnerIds.has(sq?.id ?? '')}
                 isCurrentWinner={sq?.id === latestWinnerId}
+                isSelected={selectedSquare?.row === row && selectedSquare?.col === col}
                 onClaim={onClaimSquare}
               />
             )
